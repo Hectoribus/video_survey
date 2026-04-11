@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Robot Navigation Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ═══════════════════════════════════════════
+     CONFIGURATION — edit colours/sizes here
+  ═══════════════════════════════════════════ */
+  :root {
+    --bg:        #f5f4f0;
+    --surface:   #ffffff;
+    --navy:      #1a2740;
+    --accent:    #2e6fac;
+    --muted:     #8a93a0;
+    --border:    #dde1e8;
+    --danger:    #c0392b;
+    --radius:    10px;
+    --shadow:    0 4px 24px rgba(26,39,64,.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* ── screens ── */
+  .screen { display: none; width: 100%; max-width: 720px; animation: fadeIn .4s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 48px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--navy);
+  }
+  p { line-height: 1.7; color: #444; margin-bottom: 12px; }
+  small { color: var(--muted); font-size: .82rem; }
+
+  /* ── inputs ── */
+  label { display: block; font-weight: 500; margin-bottom: 6px; font-size: .92rem; }
+  input[type="text"], input[type="password"] {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: inherit; font-size: 1rem;
+    outline: none; transition: border .2s;
+    background: #fafafa;
+  }
+  input:focus { border-color: var(--accent); background: #fff; }
+  .field { margin-bottom: 20px; }
+  .error-msg { color: var(--danger); font-size: .85rem; margin-top: 6px; display: none; }
+
+  /* ── buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 28px; border: none; border-radius: 6px;
+    font-family: inherit; font-size: .95rem; font-weight: 500;
+    cursor: pointer; transition: all .18s;
+  }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { background: #243452; }
+  .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
+  .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--border); }
+  .btn-outline:hover { border-color: var(--navy); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #245e96; }
+
+  /* ── progress bar ── */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-label { font-size: .82rem; color: var(--muted); margin-bottom: 6px; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s ease; }
+
+  /* ── video ── */
+  .video-wrapper {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    border-radius: var(--radius); overflow: hidden;
+    background: #000; margin-bottom: 12px;
+  }
+  .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+  .video-notice {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff8e6; border: 1px solid #f0d080;
+    border-radius: 6px; padding: 10px 14px;
+    font-size: .85rem; color: #7a5c00; margin-bottom: 24px;
+  }
+  .video-notice.done { background: #edfaf2; border-color: #7ed6a2; color: #1a5c35; }
+
+  /* ── questionnaire ── */
+  .q-section { margin-bottom: 32px; }
+  .q-section-title {
+    font-size: .75rem; font-weight: 500; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px; margin-bottom: 18px;
+  }
+  .q-item { margin-bottom: 22px; }
+  .q-text { font-size: .95rem; line-height: 1.55; margin-bottom: 10px; }
+  .q-text .q-num { font-weight: 600; margin-right: 4px; }
+  .q-text .q-tag { font-size: .78rem; color: var(--muted); font-style: italic; }
+
+  .likert {
+    display: flex; gap: 8px;
+    justify-content: space-between;
+  }
+  .likert-option { flex: 1; }
+  .likert-option input[type="radio"] { display: none; }
+  .likert-option label {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; padding: 8px 4px;
+    border: 1.5px solid var(--border); border-radius: 6px;
+    font-size: .8rem; color: var(--muted);
+    transition: all .15s; text-align: center;
+    user-select: none;
+  }
+  .likert-option label .val { font-size: 1rem; font-weight: 600; color: var(--navy); }
+  .likert-option input:checked + label {
+    background: var(--navy); border-color: var(--navy);
+    color: #fff;
+  }
+  .likert-option input:checked + label .val { color: #fff; }
+  .likert-option label:hover { border-color: var(--accent); }
+
+  .likert-labels {
+    display: flex; justify-content: space-between;
+    font-size: .75rem; color: var(--muted); margin-top: 4px;
+    padding: 0 2px;
+  }
+
+  /* ── locked overlay ── */
+  .questionnaire-block { position: relative; }
+  .lock-overlay {
+    position: absolute; inset: 0;
+    background: rgba(245,244,240,.85);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px; z-index: 10;
+    backdrop-filter: blur(2px);
+  }
+  .lock-overlay .lock-icon { font-size: 2rem; }
+  .lock-overlay p { font-size: .9rem; color: var(--muted); text-align: center; margin: 0; }
+
+  /* ── divider ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* ── thank-you ── */
+  .big-check { font-size: 3rem; margin-bottom: 16px; }
+  .stat-row { display: flex; gap: 16px; margin: 20px 0; }
+  .stat-box {
+    flex: 1; background: var(--bg); border-radius: 8px;
+    padding: 16px; text-align: center;
+  }
+  .stat-box .val { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+  .stat-box .lbl { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── responsive ── */
+  @media (max-width: 520px) {
+    .card { padding: 28px 20px; }
+    .likert { gap: 4px; }
+    .stat-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     ▼▼▼  EXPERIMENT CONFIGURATION — EDIT THIS SECTION  ▼▼▼
+════════════════════════════════════════════════════════════ -->
+<script>
+const CONFIG = {
+
+  // Access password (shown on first screen)
+  password: "robot2024",
+
+  // Study title shown to participants
+  title: "Robot Navigation Study",
+  subtitle: "Perception & Social Behaviour",
+
+  // ── VIDEOS ──────────────────────────────────────────────
+  // Replace the YouTube IDs below with your actual video IDs.
+  // A YouTube URL like https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  // has the ID:  dQw4w9WgXcQ
+  videos: [
+    { id: "VIDEO_ID_1", label: "Robot A" },
+    { id: "VIDEO_ID_2", label: "Robot B" },
+    { id: "VIDEO_ID_3", label: "Robot C" },
+  ],
+
+  // ── QUESTIONS ───────────────────────────────────────────
+  // shown after EACH video (same set every time)
+  // reverse: true  → value is flipped in the CSV export (6 - answer)
+  sections: [
+    {
+      title: "Section A — Safety & Comfort",
+      source: "adapted from Godspeed Perceived Safety, Bartneck 2009",
+      questions: [
+        { num: 1,  text: "The robot's behavior appeared safe to the person in the video." },
+        { num: 2,  text: "I would feel at ease being near this robot." },
+        { num: 3,  text: "Watching this robot move near the person made me feel uneasy.", reverse: true },
+      ]
+    },
+    {
+      title: "Section B — Trust & Reliability",
+      source: "adapted from TPS-HRI short form, Schaefer 2016",
+      questions: [
+        { num: 4,  text: "The robot behaved in a predictable way." },
+        { num: 5,  text: "I would trust this robot to navigate reliably around people." },
+        { num: 6,  text: "The robot's movement felt dependable." },
+      ]
+    },
+    {
+      title: "Section C — Navigation Behavior",
+      source: "Hirose et al. social navigation human metrics",
+      questions: [
+        { num: 7,  text: "The robot moved through the environment without disrupting the person nearby.", tag: "Unobtrusiveness" },
+        { num: 8,  text: "The robot's behavior felt socially considerate.", tag: "Friendliness" },
+        { num: 9,  text: "The robot's trajectory was smooth and natural-looking.", tag: "Smoothness" },
+        { num: 10, text: "The robot adjusted its path in advance to avoid potential conflicts.", tag: "Avoidance Foresight" },
+      ]
+    },
+    {
+      title: "Section D — Social Diversity Intelligence",
+      source: "adapted from PSI Scales, Barchard et al. 2020",
+      questions: [
+        { num: 11, text: "The robot appeared to be aware of the person's presence and state." },
+        { num: 12, text: "The robot appeared to adapt its movement appropriately to the situation." },
+        { num: 13, text: "The robot appeared to anticipate where the person was going." },
+        { num: 14, text: "Overall, the robot appeared to have good social skills in this situation." },
+      ]
+    },
+  ],
+
+  // Likert scale labels (1 = leftmost, 5 = rightmost)
+  likertLabels: {
+    low:  "Strongly Disagree",
+    high: "Strongly Agree",
+  },
+};
+</script>
+<!-- ▲▲▲  END OF CONFIGURATION  ▲▲▲ -->
+
+
+<!-- ══ SCREEN 1: Password ══════════════════════════════════ -->
+<div id="screen-password" class="screen active">
+  <div class="card">
+    <h1 id="title-pw"></h1>
+    <p id="subtitle-pw" style="margin-bottom:28px;color:var(--muted);"></p>
+    <div class="field">
+      <label for="pw-input">Access Code</label>
+      <input type="password" id="pw-input" placeholder="Enter access code" autocomplete="off" />
+      <div class="error-msg" id="pw-error">Incorrect access code. Please try again.</div>
+    </div>
+    <button class="btn btn-primary" onclick="checkPassword()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: Participant ID ════════════════════════════ -->
+<div id="screen-intro" class="screen">
+  <div class="card">
+    <h1>Welcome</h1>
+    <p>Thank you for participating in this study. You will watch <strong>3 short videos</strong> of a robot navigating near people, and answer a brief questionnaire after each one.</p>
+    <p>Please answer based on your immediate impression. There are no right or wrong answers.</p>
+    <hr />
+    <div class="field">
+      <label for="pid-input">Participant ID <small>(assigned by the researcher)</small></label>
+      <input type="text" id="pid-input" placeholder="e.g. P001" autocomplete="off" />
+      <div class="error-msg" id="pid-error">Please enter your participant ID.</div>
+    </div>
+    <button class="btn btn-primary" onclick="startExperiment()">Begin Study →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3: Video + Questionnaire ════════════════════ -->
+<div id="screen-trial" class="screen">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label" id="progress-label"></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <h2 id="trial-heading"></h2>
+    <p style="margin-bottom:16px;font-size:.9rem;color:var(--muted);">
+      Watch the full video. The questionnaire will unlock automatically when it ends.
+    </p>
+
+    <div class="video-wrapper">
+      <div id="yt-player"></div>
+    </div>
+
+    <div class="video-notice" id="video-notice">
+      <span>⏳</span> <span>Please watch the complete video before answering.</span>
+    </div>
+
+    <!-- Questionnaire (locked until video ends) -->
+    <div class="questionnaire-block" id="q-block">
+      <div class="lock-overlay" id="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <p>Questions will appear here<br/>once the video has finished.</p>
+      </div>
+      <div id="q-form"></div>
+    </div>
+
+    <div style="margin-top:28px; text-align:right;">
+      <button class="btn btn-primary" id="btn-next" onclick="submitTrial()" disabled>
+        Next →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4: Thank You ══════════════════════════════════ -->
+<div id="screen-done" class="screen">
+  <div class="card" style="text-align:center;">
+    <div class="big-check">✅</div>
+    <h1>Study Complete</h1>
+    <p>Thank you for your participation. Your responses have been recorded.</p>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="val" id="stat-videos"></div>
+        <div class="lbl">Videos watched</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="stat-questions"></div>
+        <div class="lbl">Questions answered</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="stat-pid"></div>
+        <div class="lbl">Participant ID</div>
+      </div>
+    </div>
+    <hr />
+    <p style="font-size:.9rem;">Click below to download your responses as a CSV file and hand it to the researcher.</p>
+    <button class="btn btn-accent" onclick="downloadCSV()">⬇ Download Responses (CSV)</button>
+  </div>
+</div>
+
+
+<!-- ══ YOUTUBE IFRAME API ══════════════════════════════════ -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+// ── State ──────────────────────────────────────────────────
+let participantId = "";
+let videoOrder = [];      // shuffled indices into CONFIG.videos
+let currentTrial = 0;     // which video we're on (0-based)
+let ytPlayer = null;
+let videoFinished = false;
+let allResponses = [];    // { videoLabel, videoId, order, answers: [{num, raw, scored}] }
+let playerReady = false;
+
+// ── Init ───────────────────────────────────────────────────
+window.onload = () => {
+  document.getElementById("title-pw").textContent   = CONFIG.title;
+  document.getElementById("subtitle-pw").textContent = CONFIG.subtitle;
+
+  // allow Enter key on password field
+  document.getElementById("pw-input").addEventListener("keydown", e => { if(e.key==="Enter") checkPassword(); });
+  document.getElementById("pid-input").addEventListener("keydown", e => { if(e.key==="Enter") startExperiment(); });
+};
+
+// ── YouTube API ready callback ────────────────────────────
+function onYouTubeIframeAPIReady() { playerReady = true; }
+
+// ── Password ──────────────────────────────────────────────
+function checkPassword() {
+  const val = document.getElementById("pw-input").value.trim();
+  if (val === CONFIG.password) {
+    showScreen("screen-intro");
+  } else {
+    document.getElementById("pw-error").style.display = "block";
+  }
+}
+
+// ── Start experiment ──────────────────────────────────────
+function startExperiment() {
+  const pid = document.getElementById("pid-input").value.trim();
+  if (!pid) { document.getElementById("pid-error").style.display = "block"; return; }
+  participantId = pid;
+
+  // Shuffle video order (Fisher-Yates)
+  videoOrder = CONFIG.videos.map((_, i) => i);
+  for (let i = videoOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [videoOrder[i], videoOrder[j]] = [videoOrder[j], videoOrder[i]];
+  }
+
+  currentTrial = 0;
+  showScreen("screen-trial");
+  loadTrial();
+}
+
+// ── Load a trial ──────────────────────────────────────────
+function loadTrial() {
+  videoFinished = false;
+
+  const vidIdx   = videoOrder[currentTrial];
+  const video    = CONFIG.videos[vidIdx];
+  const total    = CONFIG.videos.length;
+
+  // Progress
+  document.getElementById("progress-label").textContent =
+    `Video ${currentTrial + 1} of ${total}`;
+  document.getElementById("progress-fill").style.width =
+    `${((currentTrial) / total) * 100}%`;
+
+  document.getElementById("trial-heading").textContent =
+    `Video ${currentTrial + 1} — ${video.label}`;
+
+  // Reset notice
+  const notice = document.getElementById("video-notice");
+  notice.className = "video-notice";
+  notice.innerHTML = "<span>⏳</span><span>Please watch the complete video before answering.</span>";
+
+  // Lock questionnaire
+  document.getElementById("lock-overlay").style.display = "flex";
+  document.getElementById("btn-next").disabled = true;
+
+  // Build questionnaire HTML
+  buildQuestionnaire(vidIdx);
+
+  // Load YouTube player
+  if (ytPlayer) {
+    ytPlayer.destroy();
+  }
+
+  // Small delay to ensure div is in DOM
+  setTimeout(() => {
+    ytPlayer = new YT.Player("yt-player", {
+      videoId: video.id,
+      playerVars: { rel: 0, modestbranding: 1, fs: 1 },
+      events: {
+        onStateChange: onPlayerStateChange,
+      }
+    });
+  }, 100);
+}
+
+// ── YouTube state change ──────────────────────────────────
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.ENDED) {
+    videoFinished = true;
+    unlockQuestionnaire();
+  }
+}
+
+function unlockQuestionnaire() {
+  document.getElementById("lock-overlay").style.display = "none";
+
+  const notice = document.getElementById("video-notice");
+  notice.className = "video-notice done";
+  notice.innerHTML = "<span>✅</span><span>Video complete — please answer all questions below.</span>";
+
+  checkAllAnswered(); // in case all were pre-filled (shouldn't happen but just in case)
+}
+
+// ── Build questionnaire ───────────────────────────────────
+function buildQuestionnaire(vidIdx) {
+  const form = document.getElementById("q-form");
+  form.innerHTML = "";
+
+  CONFIG.sections.forEach(section => {
+    const secDiv = document.createElement("div");
+    secDiv.className = "q-section";
+
+    const titleEl = document.createElement("div");
+    titleEl.className = "q-section-title";
+    titleEl.textContent = section.title + (section.source ? ` — ${section.source}` : "");
+    secDiv.appendChild(titleEl);
+
+    section.questions.forEach(q => {
+      const qDiv = document.createElement("div");
+      qDiv.className = "q-item";
+
+      const qText = document.createElement("div");
+      qText.className = "q-text";
+      qText.innerHTML =
+        `<span class="q-num">${q.num}.</span> ${q.text}` +
+        (q.tag ? ` <span class="q-tag">(${q.tag})</span>` : "") +
+        (q.reverse ? ` <span class="q-tag" style="color:#c06000;">[reverse-scored]</span>` : "");
+      qDiv.appendChild(qText);
+
+      // Likert row
+      const likertDiv = document.createElement("div");
+      likertDiv.className = "likert";
+      for (let v = 1; v <= 5; v++) {
+        const opt = document.createElement("div");
+        opt.className = "likert-option";
+        const inputId = `q${q.num}_v${v}_trial${currentTrial}`;
+        opt.innerHTML = `
+          <input type="radio" name="q${q.num}_trial${currentTrial}" id="${inputId}" value="${v}" onchange="checkAllAnswered()" />
+          <label for="${inputId}"><span class="val">${v}</span></label>`;
+        likertDiv.appendChild(opt);
+      }
+
+      const labelsDiv = document.createElement("div");
+      labelsDiv.className = "likert-labels";
+      labelsDiv.innerHTML = `<span>${CONFIG.likertLabels.low}</span><span>${CONFIG.likertLabels.high}</span>`;
+
+      qDiv.appendChild(likertDiv);
+      qDiv.appendChild(labelsDiv);
+      secDiv.appendChild(qDiv);
+    });
+
+    form.appendChild(secDiv);
+  });
+}
+
+// ── Check if all questions answered ──────────────────────
+function checkAllAnswered() {
+  if (!videoFinished) return;
+  const allQs = getAllQuestions();
+  const allAnswered = allQs.every(q => {
+    const sel = document.querySelector(`input[name="q${q.num}_trial${currentTrial}"]:checked`);
+    return sel !== null;
+  });
+  document.getElementById("btn-next").disabled = !allAnswered;
+}
+
+function getAllQuestions() {
+  return CONFIG.sections.flatMap(s => s.questions);
+}
+
+// ── Submit trial ──────────────────────────────────────────
+function submitTrial() {
+  const vidIdx = videoOrder[currentTrial];
+  const video  = CONFIG.videos[vidIdx];
+  const allQs  = getAllQuestions();
+
+  const answers = allQs.map(q => {
+    const raw = parseInt(document.querySelector(`input[name="q${q.num}_trial${currentTrial}"]:checked`).value);
+    const scored = q.reverse ? (6 - raw) : raw;
+    return { num: q.num, raw, scored, reverse: !!q.reverse };
+  });
+
+  allResponses.push({
+    participantId,
+    videoLabel: video.label,
+    videoId: video.id,
+    presentationOrder: currentTrial + 1,
+    answers,
+  });
+
+  currentTrial++;
+
+  if (currentTrial < CONFIG.videos.length) {
+    loadTrial();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    showDone();
+  }
+}
+
+// ── Done screen ───────────────────────────────────────────
+function showDone() {
+  showScreen("screen-done");
+  document.getElementById("stat-videos").textContent    = CONFIG.videos.length;
+  document.getElementById("stat-questions").textContent = getAllQuestions().length * CONFIG.videos.length;
+  document.getElementById("stat-pid").textContent       = participantId;
+}
+
+// ── CSV export ────────────────────────────────────────────
+function downloadCSV() {
+  // Build header
+  const allQs = getAllQuestions();
+  const qHeaders = allQs.flatMap(q => [`Q${q.num}_raw`, `Q${q.num}_scored`]);
+  const header = ["ParticipantID","VideoLabel","VideoID","PresentationOrder",...qHeaders];
+
+  const rows = allResponses.map(r => {
+    const answerCols = r.answers.flatMap(a => [a.raw, a.scored]);
+    return [r.participantId, r.videoLabel, r.videoId, r.presentationOrder, ...answerCols];
+  });
+
+  const csv = [header, ...rows].map(row => row.map(v => `"${v}"`).join(",")).join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `responses_${participantId}_${Date.now()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Utility ───────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+</script>
+
+</body>
+</html>
