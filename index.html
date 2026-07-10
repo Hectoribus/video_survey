@@ -6,20 +6,17 @@
 <title>Robot Navigation Study</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
-  /* ═══════════════════════════════════════════
-     THEME VARIABLES
-  ═══════════════════════════════════════════ */
   :root {
-    --bg:       #f5f4f0;
-    --surface:  #ffffff;
-    --navy:     #1a2740;
-    --accent:   #2e6fac;
-    --green:    #2a7a4f;
-    --muted:    #8a93a0;
-    --border:   #dde1e8;
-    --danger:   #c0392b;
-    --radius:   10px;
-    --shadow:   0 4px 24px rgba(26,39,64,.08);
+    --bg:      #f5f4f0;
+    --surface: #ffffff;
+    --navy:    #1a2740;
+    --accent:  #2e6fac;
+    --green:   #2a7a4f;
+    --muted:   #8a93a0;
+    --border:  #dde1e8;
+    --danger:  #c0392b;
+    --radius:  10px;
+    --shadow:  0 4px 24px rgba(26,39,64,.08);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +32,6 @@
     padding: 40px 24px;
   }
 
-  /* ── screens ── */
   .screen { display: none; width: 100%; max-width: 740px; }
   .screen.active { display: block; animation: fadeIn .4s ease; }
   @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
@@ -52,7 +48,6 @@
   h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 24px; }
   p  { line-height: 1.7; color: #444; margin-bottom: 12px; }
 
-  /* ── form elements ── */
   .field { margin-bottom: 20px; }
   .field label { display: block; font-weight: 500; margin-bottom: 6px; font-size: .92rem; }
   input[type="text"], input[type="password"] {
@@ -64,70 +59,68 @@
   input:focus { border-color: var(--accent); background: #fff; }
   .error-msg { color: var(--danger); font-size: .85rem; margin-top: 6px; display: none; }
 
-  /* ── buttons ── */
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 13px 28px; border: none; border-radius: 6px;
     font-family: inherit; font-size: .95rem; font-weight: 500;
     cursor: pointer; transition: all .18s;
   }
-  .btn-primary  { background: var(--navy);   color: #fff; }
-  .btn-primary:hover:not(:disabled)  { background: #243452; }
-  .btn-primary:disabled              { background: var(--muted); cursor: not-allowed; }
-  .btn-accent   { background: var(--accent); color: #fff; }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: #243452; }
+  .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
+  .btn-accent { background: var(--accent); color: #fff; }
   .btn-accent:hover { background: #245e96; }
+  .btn-outline {
+    background: transparent; color: var(--navy);
+    border: 1.5px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--navy); }
 
-  /* ── progress ── */
   .progress-wrap { margin-bottom: 28px; }
   .progress-label { font-size: .82rem; color: var(--muted); margin-bottom: 6px; }
   .progress-bar   { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
   .progress-fill  { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s ease; }
 
-  /* ── video section header ── */
   .video-section { margin-bottom: 28px; }
   .video-section-header {
     display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
   }
   .video-badge {
     font-size: .78rem; font-weight: 700; letter-spacing: .06em;
-    padding: 4px 14px; border-radius: 99px; color: #fff;
-    white-space: nowrap;
+    padding: 4px 14px; border-radius: 99px; color: #fff; white-space: nowrap;
   }
   .badge-a { background: var(--navy); }
   .badge-b { background: var(--green); }
   .section-line { flex: 1; height: 1px; background: var(--border); }
 
-  /* ── video player ── */
   .video-wrapper {
     position: relative; padding-bottom: 56.25%; height: 0;
     border-radius: 8px; overflow: hidden; background: #111; margin-bottom: 10px;
   }
   .video-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
 
-  /* ── notice bar ── */
   .video-notice {
     display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px; border-radius: 6px; font-size: .85rem;
-    margin-bottom: 18px;
+    padding: 10px 14px; border-radius: 6px; font-size: .85rem; margin-bottom: 18px;
     background: #fff8e6; border: 1px solid #f0d080; color: #7a5c00;
   }
   .video-notice.done { background: #edfaf2; border-color: #7ed6a2; color: #1a5c35; }
 
-  /* ── questionnaire ── */
   .q-block { position: relative; }
   .lock-overlay {
     position: absolute; inset: 0; z-index: 10;
     background: rgba(245,244,240,.88); backdrop-filter: blur(2px);
     border-radius: var(--radius);
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 8px; min-height: 100px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px; min-height: 100px;
   }
   .lock-overlay .icon { font-size: 1.5rem; }
   .lock-overlay span  { font-size: .85rem; color: var(--muted); }
 
-  .q-item   { margin-bottom: 24px; }
-  .q-text   { font-size: .93rem; line-height: 1.6; margin-bottom: 10px; }
-  .q-num    { font-weight: 700; margin-right: 4px; }
+  .q-item  { margin-bottom: 24px; }
+  .q-text  { font-size: .93rem; line-height: 1.6; margin-bottom: 10px; }
+  .q-num   { font-weight: 700; margin-right: 4px; }
 
   .likert { display: flex; gap: 8px; }
   .likert-option { flex: 1; }
@@ -147,7 +140,6 @@
     font-size: .73rem; color: var(--muted); margin-top: 4px; padding: 0 2px;
   }
 
-  /* ── forced choice ── */
   .forced-section {
     margin-top: 28px; padding-top: 28px;
     border-top: 2px dashed var(--border);
@@ -169,25 +161,42 @@
   .choice-btn.picked-a { background: var(--navy);  border-color: var(--navy);  color: #fff; }
   .choice-btn.picked-b { background: var(--green); border-color: var(--green); color: #fff; }
 
-  /* ── section divider ── */
   .scenario-divider {
     display: flex; align-items: center; gap: 14px; margin: 32px 0;
   }
   .scenario-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
   .scenario-divider span {
     font-size: .78rem; font-weight: 600; letter-spacing: .08em;
-    text-transform: uppercase; color: var(--muted);
-    white-space: nowrap;
+    text-transform: uppercase; color: var(--muted); white-space: nowrap;
   }
 
-  /* ── done screen ── */
+  /* ── Done screen ── */
   .big-check { font-size: 3rem; margin-bottom: 16px; }
   .stat-row  { display: flex; gap: 16px; margin: 20px 0; }
   .stat-box  { flex: 1; background: var(--bg); border-radius: 8px; padding: 16px; text-align: center; }
   .stat-box .val { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
   .stat-box .lbl { font-size: .78rem; color: var(--muted); margin-top: 2px; }
 
+  /* ── Submission status ── */
+  .submit-status {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-radius: 8px; font-size: .9rem;
+    margin-bottom: 16px;
+  }
+  .submit-status.sending { background: #f0f4ff; border: 1px solid #b0c4f0; color: #2a4a9c; }
+  .submit-status.ok      { background: #edfaf2; border: 1px solid #7ed6a2; color: #1a5c35; }
+  .submit-status.fail    { background: #fff0f0; border: 1px solid #f0a0a0; color: #8c1c1c; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 16px; height: 16px; border: 2px solid currentColor;
+    border-top-color: transparent; border-radius: 50%;
+    animation: spin .7s linear infinite; flex-shrink: 0;
+  }
+
   hr.plain { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  .done-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
   @media (max-width: 520px) {
     .card { padding: 28px 18px; }
@@ -201,24 +210,31 @@
 <!-- ═══════════════════════════════════════════════════════════
      ▼▼▼  EXPERIMENT CONFIGURATION — EDIT THIS SECTION  ▼▼▼
 ════════════════════════════════════════════════════════════════
-  HOW TO ADD YOUTUBE VIDEOS:
-  Take your YouTube URL, e.g.:
-    https://www.youtube.com/watch?v=dQw4w9WgXcQ
-  The part after "v=" is the video ID:  dQw4w9WgXcQ
-  Paste that ID into the fields below.
+
+  YOUTUBE VIDEO IDs:
+  From a URL like  https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  the ID is the part after "v=":  dQw4w9WgXcQ
+
+  GOOGLE SHEETS URL:
+  Paste the Web App URL from your Apps Script deployment here.
+  Leave it as "" to disable (CSV-only mode).
+
 ═══════════════════════════════════════════════════════════════ -->
 <script>
 const CONFIG = {
 
-  // ── Access password shown on first screen ──────────────────
+  // ── Access password ────────────────────────────────────────
   password: "robot2024",
 
-  // ── Page titles ───────────────────────────────────────────
+  // ── Titles ────────────────────────────────────────────────
   title:    "Robot Navigation Study",
   subtitle: "Social Behaviour Perception",
 
-  // ── Scenarios (3 total, shown in random order each session)
-  // Replace VIDEO_ID_* with real YouTube video IDs.
+  // ── Google Sheets Web App URL (paste yours here) ──────────
+  // Leave as "" to run in CSV-only mode.
+  googleSheetsUrl: "",
+
+  // ── Scenarios ─────────────────────────────────────────────
   scenarios: [
     {
       label:  "Scenario 1",
@@ -237,7 +253,7 @@ const CONFIG = {
     },
   ],
 
-  // ── Questions shown after EACH video (same set for A and B)
+  // ── Questions (same set shown after each video) ───────────
   questions: [
     { num: 1, text: "The robot adjusted its behavior appropriately for this person/s." },
     { num: 2, text: "The robot seemed aware of the specific needs of this person/s." },
@@ -247,11 +263,11 @@ const CONFIG = {
     { num: 6, text: "The robot's movements were easy to anticipate." },
   ],
 
-  // ── Forced-choice question shown at the end of each scenario
+  // ── Forced-choice question (end of each scenario) ─────────
   forcedChoiceText:
     "Which behavior did you find more appropriate for this situation — Video A or Video B?",
 
-  // ── Likert scale end labels ────────────────────────────────
+  // ── Likert scale labels ────────────────────────────────────
   likertLow:  "Strongly Disagree",
   likertHigh: "Strongly Agree",
 };
@@ -273,12 +289,12 @@ const CONFIG = {
   </div>
 </div>
 
-<!-- ══ SCREEN 2: Welcome & Participant ID ═════════════════ -->
+<!-- ══ SCREEN 2: Welcome ════════════════════════════════════ -->
 <div id="screen-intro" class="screen">
   <div class="card">
     <h1>Welcome</h1>
-    <p>Thank you for participating in this study. You will watch <strong>3 scenarios</strong>, each with two short robot navigation videos (A and B).</p>
-    <p>After each video, please answer 6 questions based on your immediate impression. At the end of each scenario you will be asked a final preference question. There are no right or wrong answers.</p>
+    <p>Thank you for participating in this study. You will watch <strong>3 scenarios</strong>, each containing two short robot navigation videos (A and B).</p>
+    <p>After each video please answer 6 questions based on your immediate impression. At the end of each scenario you will be asked one final preference question. There are no right or wrong answers.</p>
     <hr class="plain" />
     <div class="field">
       <label for="pid-input">Participant ID <small style="color:var(--muted);">(assigned by the researcher)</small></label>
@@ -289,11 +305,9 @@ const CONFIG = {
   </div>
 </div>
 
-<!-- ══ SCREEN 3: Scenario Trial ════════════════════════════ -->
+<!-- ══ SCREEN 3: Scenario trial ════════════════════════════ -->
 <div id="screen-trial" class="screen">
   <div class="card">
-
-    <!-- Progress bar -->
     <div class="progress-wrap">
       <div class="progress-label" id="progress-label"></div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -301,7 +315,7 @@ const CONFIG = {
 
     <h2 id="scenario-heading"></h2>
 
-    <!-- ─── VIDEO A ──────────────────────────────────────── -->
+    <!-- Video A -->
     <div class="video-section" id="section-a">
       <div class="video-section-header">
         <span class="video-badge badge-a">Video A</span>
@@ -320,7 +334,7 @@ const CONFIG = {
       </div>
     </div>
 
-    <!-- ─── VIDEO B (revealed after A questions done) ─────── -->
+    <!-- Video B (hidden until A questions done) -->
     <div class="video-section" id="section-b" style="display:none;">
       <div class="scenario-divider"><hr/><span>Now watch Video B</span><hr/></div>
       <div class="video-section-header">
@@ -340,7 +354,7 @@ const CONFIG = {
       </div>
     </div>
 
-    <!-- ─── FORCED CHOICE (revealed after B questions done) ── -->
+    <!-- Forced choice (hidden until B questions done) -->
     <div class="forced-section" id="section-forced" style="display:none;">
       <div class="forced-label">Final Question for This Scenario</div>
       <div class="forced-q" id="forced-q-text"></div>
@@ -350,13 +364,11 @@ const CONFIG = {
       </div>
     </div>
 
-    <!-- ─── NEXT button ───────────────────────────────────── -->
     <div style="margin-top:36px; display:flex; justify-content:flex-end;">
       <button class="btn btn-primary" id="btn-next" onclick="nextScenario()" disabled>
         Next Scenario →
       </button>
     </div>
-
   </div>
 </div>
 
@@ -366,39 +378,51 @@ const CONFIG = {
     <div class="big-check">✅</div>
     <h1>Study Complete</h1>
     <p>Thank you for your time. Your responses have been recorded.</p>
+
     <div class="stat-row">
-      <div class="stat-box"><div class="val" id="stat-scenarios"></div><div class="lbl">Scenarios completed</div></div>
-      <div class="stat-box"><div class="val" id="stat-responses"></div><div class="lbl">Responses recorded</div></div>
+      <div class="stat-box"><div class="val" id="stat-scenarios"></div><div class="lbl">Scenarios</div></div>
+      <div class="stat-box"><div class="val" id="stat-responses"></div><div class="lbl">Answers recorded</div></div>
       <div class="stat-box"><div class="val" id="stat-pid"></div><div class="lbl">Participant ID</div></div>
     </div>
-    <hr class="plain"/>
-    <p style="font-size:.9rem; margin-bottom:20px;">
-      Please download your response file and hand it to the researcher.
+
+    <hr class="plain" />
+
+    <!-- Submission status (only shown if googleSheetsUrl is set) -->
+    <div id="sheets-status-wrap" style="display:none; margin-bottom:20px;">
+      <div class="submit-status sending" id="sheets-status">
+        <div class="spinner"></div>
+        <span>Sending responses to researcher…</span>
+      </div>
+    </div>
+
+    <p style="font-size:.88rem; color:var(--muted); margin-bottom:20px;">
+      Please also download the backup CSV and send it to the researcher.
     </p>
-    <button class="btn btn-accent" onclick="downloadCSV()">⬇ Download Responses (CSV)</button>
+
+    <div class="done-actions">
+      <button class="btn btn-accent" onclick="downloadCSV()">⬇ Download Backup CSV</button>
+    </div>
   </div>
 </div>
 
 
-<!-- ══ YOUTUBE IFRAME API ══════════════════════════════════ -->
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-// ── Globals ─────────────────────────────────────────────────
+// ── State ────────────────────────────────────────────────────
 let participantId   = "";
-let scenarioOrder   = [];   // shuffled indices into CONFIG.scenarios
+let scenarioOrder   = [];
 let currentScenario = 0;
 let allResponses    = [];
 
-// Per-scenario state
 let playerA = null, playerB = null;
-let stateAVideoDone   = false;
-let stateAQsDone      = false;
-let stateBVideoDone   = false;
-let stateBQsDone      = false;
-let forcedChoice      = null; // 'A' | 'B'
+let stateAVideoDone = false;
+let stateAQsDone    = false;
+let stateBVideoDone = false;
+let stateBQsDone    = false;
+let forcedChoice    = null;
 
-// ── YouTube API ready (called by the API itself) ─────────────
+// ── YouTube API callback ─────────────────────────────────────
 function onYouTubeIframeAPIReady() { /* players created dynamically */ }
 
 // ── Boot ─────────────────────────────────────────────────────
@@ -420,13 +444,13 @@ function checkPassword() {
   }
 }
 
-// ── Start ─────────────────────────────────────────────────────
+// ── Start experiment ──────────────────────────────────────────
 function startExperiment() {
   const pid = document.getElementById("pid-input").value.trim();
   if (!pid) { document.getElementById("pid-error").style.display = "block"; return; }
   participantId = pid;
 
-  // Shuffle scenario order (Fisher-Yates)
+  // Fisher-Yates shuffle
   scenarioOrder = CONFIG.scenarios.map((_, i) => i);
   for (let i = scenarioOrder.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -438,13 +462,11 @@ function startExperiment() {
   loadScenario();
 }
 
-// ── Load a scenario ───────────────────────────────────────────
+// ── Load scenario ─────────────────────────────────────────────
 function loadScenario() {
-  // Reset state flags
   stateAVideoDone = stateAQsDone = stateBVideoDone = stateBQsDone = false;
   forcedChoice = null;
 
-  // Destroy old players safely
   [playerA, playerB].forEach(p => { try { p && p.destroy(); } catch(e){} });
   playerA = playerB = null;
 
@@ -452,67 +474,51 @@ function loadScenario() {
   const scenario = CONFIG.scenarios[scenIdx];
   const total    = CONFIG.scenarios.length;
 
-  // Progress
   document.getElementById("progress-label").textContent =
     `Scenario ${currentScenario + 1} of ${total}`;
   document.getElementById("progress-fill").style.width =
     `${(currentScenario / total) * 100}%`;
-
-  // Heading & next-button label
   document.getElementById("scenario-heading").textContent = scenario.label;
   document.getElementById("btn-next").textContent =
     currentScenario === total - 1 ? "Complete Study ✓" : "Next Scenario →";
   document.getElementById("btn-next").disabled = true;
 
-  // Reset notices
   setNotice("notice-a", false);
   setNotice("notice-b", false);
-
-  // Reset locks
   document.getElementById("lock-a").style.display = "flex";
   document.getElementById("lock-b").style.display = "flex";
-
-  // Hide Video B and forced-choice sections
   document.getElementById("section-b").style.display      = "none";
   document.getElementById("section-forced").style.display = "none";
-
-  // Reset forced-choice buttons
   document.getElementById("choice-a").className = "choice-btn";
   document.getElementById("choice-b").className = "choice-btn";
   document.getElementById("forced-q-text").textContent = CONFIG.forcedChoiceText;
 
-  // Rebuild player divs (YT API replaces them, so we restore)
+  // Restore player divs (YT API replaces them with iframes)
   document.getElementById("wrapper-a").innerHTML = '<div id="yt-player-a"></div>';
   document.getElementById("wrapper-b").innerHTML = '<div id="yt-player-b"></div>';
 
-  // Build question forms
   buildQuestions("q-form-a", "qa");
   buildQuestions("q-form-b", "qb");
 
-  // Create Player A
   setTimeout(() => {
     playerA = new YT.Player("yt-player-a", {
       videoId: scenario.videoA.id,
       playerVars: { rel: 0, modestbranding: 1 },
-      events: {
-        onStateChange: e => {
-          if (e.data === YT.PlayerState.ENDED) onVideoAEnd();
-        }
-      }
+      events: { onStateChange: e => { if (e.data === YT.PlayerState.ENDED) onVideoAEnd(); } }
     });
   }, 150);
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// ── Video A ends → unlock questions A ────────────────────────
+// ── Video A ends ──────────────────────────────────────────────
 function onVideoAEnd() {
   stateAVideoDone = true;
   setNotice("notice-a", true);
   document.getElementById("lock-a").style.display = "none";
 }
 
-// ── Check if all A questions answered ────────────────────────
+// ── Check A questions ─────────────────────────────────────────
 function checkAQuestions() {
   if (!stateAVideoDone) return;
   const done = CONFIG.questions.every(q =>
@@ -528,34 +534,27 @@ function checkAQuestions() {
 function revealVideoB() {
   const scenIdx  = scenarioOrder[currentScenario];
   const scenario = CONFIG.scenarios[scenIdx];
-
-  const sectionB = document.getElementById("section-b");
-  sectionB.style.display = "block";
-  sectionB.classList.add("reveal");
-
-  setTimeout(() => sectionB.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-
+  const sec = document.getElementById("section-b");
+  sec.style.display = "block";
+  sec.classList.add("reveal");
+  setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
   setTimeout(() => {
     playerB = new YT.Player("yt-player-b", {
       videoId: scenario.videoB.id,
       playerVars: { rel: 0, modestbranding: 1 },
-      events: {
-        onStateChange: e => {
-          if (e.data === YT.PlayerState.ENDED) onVideoBEnd();
-        }
-      }
+      events: { onStateChange: e => { if (e.data === YT.PlayerState.ENDED) onVideoBEnd(); } }
     });
   }, 200);
 }
 
-// ── Video B ends → unlock questions B ────────────────────────
+// ── Video B ends ──────────────────────────────────────────────
 function onVideoBEnd() {
   stateBVideoDone = true;
   setNotice("notice-b", true);
   document.getElementById("lock-b").style.display = "none";
 }
 
-// ── Check if all B questions answered ────────────────────────
+// ── Check B questions ─────────────────────────────────────────
 function checkBQuestions() {
   if (!stateBVideoDone) return;
   const done = CONFIG.questions.every(q =>
@@ -567,7 +566,7 @@ function checkBQuestions() {
   }
 }
 
-// ── Reveal forced-choice ──────────────────────────────────────
+// ── Reveal forced choice ──────────────────────────────────────
 function revealForcedChoice() {
   const sec = document.getElementById("section-forced");
   sec.style.display = "block";
@@ -575,7 +574,7 @@ function revealForcedChoice() {
   setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
 }
 
-// ── Forced-choice selection ───────────────────────────────────
+// ── Forced choice selection ───────────────────────────────────
 function selectChoice(pick) {
   forcedChoice = pick;
   document.getElementById("choice-a").className = "choice-btn" + (pick === "A" ? " picked-a" : "");
@@ -583,7 +582,7 @@ function selectChoice(pick) {
   document.getElementById("btn-next").disabled = false;
 }
 
-// ── Submit scenario & move to next ────────────────────────────
+// ── Next scenario / finish ────────────────────────────────────
 function nextScenario() {
   const scenIdx  = scenarioOrder[currentScenario];
   const scenario = CONFIG.scenarios[scenIdx];
@@ -597,7 +596,7 @@ function nextScenario() {
     value: parseInt(document.querySelector(`input[name="qb_${q.num}"]:checked`).value),
   }));
 
-  allResponses.push({
+  const record = {
     participantId,
     scenarioLabel:         scenario.label,
     scenarioOriginalIndex: scenIdx + 1,
@@ -607,7 +606,12 @@ function nextScenario() {
     answersA,
     answersB,
     forcedChoice,
-  });
+  };
+
+  allResponses.push(record);
+
+  // ── Send this scenario's row to Google Sheets immediately ──
+  submitToSheets(record);
 
   currentScenario++;
   if (currentScenario < CONFIG.scenarios.length) {
@@ -617,23 +621,47 @@ function nextScenario() {
   }
 }
 
+// ── Send one scenario row to Google Sheets ────────────────────
+function submitToSheets(record) {
+  if (!CONFIG.googleSheetsUrl) return;
+  fetch(CONFIG.googleSheetsUrl, {
+    method:  "POST",
+    mode:    "no-cors",          // avoids CORS preflight; response will be opaque
+    headers: { "Content-Type": "text/plain" },
+    body:    JSON.stringify(record),
+  }).catch(err => console.warn("Sheets submit failed:", err));
+}
+
 // ── Done screen ───────────────────────────────────────────────
 function showDone() {
   showScreen("screen-done");
+
   document.getElementById("stat-scenarios").textContent = CONFIG.scenarios.length;
   document.getElementById("stat-responses").textContent =
     CONFIG.questions.length * 2 * CONFIG.scenarios.length;
   document.getElementById("stat-pid").textContent = participantId;
+
+  // Show submission status if Sheets is configured
+  if (CONFIG.googleSheetsUrl) {
+    const wrap   = document.getElementById("sheets-status-wrap");
+    const status = document.getElementById("sheets-status");
+    wrap.style.display = "block";
+
+    // Data was already sent per scenario; just show confirmation after a moment
+    setTimeout(() => {
+      status.className = "submit-status ok";
+      status.innerHTML = "✅ &nbsp;Responses sent to researcher successfully.";
+    }, 1200);
+  }
 }
 
-// ── CSV download ──────────────────────────────────────────────
+// ── CSV download (backup) ─────────────────────────────────────
 function downloadCSV() {
   const qHeaders = CONFIG.questions.flatMap(q => [`Q${q.num}_VideoA`, `Q${q.num}_VideoB`]);
   const header   = [
     "ParticipantID", "ScenarioLabel", "ScenarioOriginalIndex",
     "PresentationOrder", "VideoA_ID", "VideoB_ID",
-    ...qHeaders,
-    "ForcedChoice"
+    ...qHeaders, "ForcedChoice"
   ];
 
   const rows = allResponses.map(r => {
@@ -649,10 +677,7 @@ function downloadCSV() {
     ];
   });
 
-  const csv = [header, ...rows]
-    .map(row => row.map(v => `"${v}"`).join(","))
-    .join("\n");
-
+  const csv  = [header, ...rows].map(r => r.map(v => `"${v}"`).join(",")).join("\n");
   const blob = new Blob([csv], { type: "text/csv" });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement("a");
@@ -662,9 +687,9 @@ function downloadCSV() {
   URL.revokeObjectURL(url);
 }
 
-// ── Build a question form ─────────────────────────────────────
+// ── Build question form ───────────────────────────────────────
 function buildQuestions(containerId, prefix) {
-  const form = document.getElementById(containerId);
+  const form     = document.getElementById(containerId);
   form.innerHTML = "";
   const onChange = prefix === "qa" ? "checkAQuestions()" : "checkBQuestions()";
 
@@ -672,13 +697,11 @@ function buildQuestions(containerId, prefix) {
     const qDiv = document.createElement("div");
     qDiv.className = "q-item";
 
-    // Question text
     const qText = document.createElement("div");
     qText.className = "q-text";
     qText.innerHTML = `<span class="q-num">${q.num}.</span> ${q.text}`;
     qDiv.appendChild(qText);
 
-    // Likert row
     const likert = document.createElement("div");
     likert.className = "likert";
     for (let v = 1; v <= 5; v++) {
@@ -700,7 +723,7 @@ function buildQuestions(containerId, prefix) {
   });
 }
 
-// ── Helpers ───────────────────────────────────────────────────
+// ── Utilities ─────────────────────────────────────────────────
 function setNotice(id, done) {
   const el = document.getElementById(id);
   if (done) {
