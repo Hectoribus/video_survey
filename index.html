@@ -37,28 +37,28 @@
   @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
   .reveal { animation: fadeIn .45s ease; }
 
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 48px;
-  }
+  .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 48px; }
 
   h1 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; line-height: 1.2; margin-bottom: 8px; }
   h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 24px; }
   p  { line-height: 1.7; color: #444; margin-bottom: 12px; }
 
-  .field { margin-bottom: 20px; }
-  .field label { display: block; font-weight: 500; margin-bottom: 6px; font-size: .92rem; }
-  input[type="text"], input[type="password"] {
+  hr.plain { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* ── Inputs ── */
+  .field { margin-bottom: 24px; }
+  .field > label { display: block; font-weight: 600; font-size: .92rem; margin-bottom: 10px; }
+  input[type="text"], input[type="password"], input[type="number"] {
     width: 100%; padding: 12px 14px;
     border: 1.5px solid var(--border); border-radius: 6px;
     font-family: inherit; font-size: 1rem; outline: none;
     background: #fafafa; transition: border .2s;
   }
+  input[type="number"] { width: 120px; }
   input:focus { border-color: var(--accent); background: #fff; }
-  .error-msg { color: var(--danger); font-size: .85rem; margin-top: 6px; display: none; }
+  .error-msg { color: var(--danger); font-size: .85rem; margin-top: 8px; display: none; }
 
+  /* ── Buttons ── */
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 13px 28px; border: none; border-radius: 6px;
@@ -68,60 +68,27 @@
   .btn-primary { background: var(--navy); color: #fff; }
   .btn-primary:hover:not(:disabled) { background: #243452; }
   .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
-  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent  { background: var(--accent); color: #fff; }
   .btn-accent:hover { background: #245e96; }
-  .btn-outline {
-    background: transparent; color: var(--navy);
-    border: 1.5px solid var(--border);
-  }
-  .btn-outline:hover { border-color: var(--navy); }
 
+  /* ── Progress ── */
   .progress-wrap { margin-bottom: 28px; }
   .progress-label { font-size: .82rem; color: var(--muted); margin-bottom: 6px; }
   .progress-bar   { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
   .progress-fill  { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s ease; }
 
-  .video-section { margin-bottom: 28px; }
-  .video-section-header {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  /* ── Radio pills (gender) ── */
+  .radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .radio-pill input[type="radio"] { display: none; }
+  .radio-pill label {
+    padding: 9px 18px; border: 1.5px solid var(--border);
+    border-radius: 99px; cursor: pointer; font-size: .9rem;
+    transition: all .15s; user-select: none;
   }
-  .video-badge {
-    font-size: .78rem; font-weight: 700; letter-spacing: .06em;
-    padding: 4px 14px; border-radius: 99px; color: #fff; white-space: nowrap;
-  }
-  .badge-a { background: var(--navy); }
-  .badge-b { background: var(--green); }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .radio-pill label:hover { border-color: var(--navy); }
+  .radio-pill input:checked + label { background: var(--navy); border-color: var(--navy); color: #fff; }
 
-  .video-wrapper {
-    position: relative; padding-bottom: 56.25%; height: 0;
-    border-radius: 8px; overflow: hidden; background: #111; margin-bottom: 10px;
-  }
-  .video-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
-
-  .video-notice {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px; border-radius: 6px; font-size: .85rem; margin-bottom: 18px;
-    background: #fff8e6; border: 1px solid #f0d080; color: #7a5c00;
-  }
-  .video-notice.done { background: #edfaf2; border-color: #7ed6a2; color: #1a5c35; }
-
-  .q-block { position: relative; }
-  .lock-overlay {
-    position: absolute; inset: 0; z-index: 10;
-    background: rgba(245,244,240,.88); backdrop-filter: blur(2px);
-    border-radius: var(--radius);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 8px; min-height: 100px;
-  }
-  .lock-overlay .icon { font-size: 1.5rem; }
-  .lock-overlay span  { font-size: .85rem; color: var(--muted); }
-
-  .q-item  { margin-bottom: 24px; }
-  .q-text  { font-size: .93rem; line-height: 1.6; margin-bottom: 10px; }
-  .q-num   { font-weight: 700; margin-right: 4px; }
-
+  /* ── Likert (shared) ── */
   .likert { display: flex; gap: 8px; }
   .likert-option { flex: 1; }
   .likert-option input[type="radio"] { display: none; }
@@ -140,35 +107,57 @@
     font-size: .73rem; color: var(--muted); margin-top: 4px; padding: 0 2px;
   }
 
-  .forced-section {
-    margin-top: 28px; padding-top: 28px;
-    border-top: 2px dashed var(--border);
+  /* ── Video section ── */
+  .video-section { margin-bottom: 28px; }
+  .video-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .video-badge { font-size: .78rem; font-weight: 700; letter-spacing: .06em; padding: 4px 14px; border-radius: 99px; color: #fff; white-space: nowrap; }
+  .badge-a { background: var(--navy); }
+  .badge-b { background: var(--green); }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #111; margin-bottom: 10px; }
+  .video-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+  .video-notice {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border-radius: 6px; font-size: .85rem; margin-bottom: 18px;
+    background: #fff8e6; border: 1px solid #f0d080; color: #7a5c00;
   }
-  .forced-label {
-    font-size: .75rem; font-weight: 600; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  .video-notice.done { background: #edfaf2; border-color: #7ed6a2; color: #1a5c35; }
+
+  /* ── Question block ── */
+  .q-block { position: relative; }
+  .lock-overlay {
+    position: absolute; inset: 0; z-index: 10;
+    background: rgba(245,244,240,.88); backdrop-filter: blur(2px);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; min-height: 100px;
   }
+  .lock-overlay .icon { font-size: 1.5rem; }
+  .lock-overlay span  { font-size: .85rem; color: var(--muted); }
+  .q-item  { margin-bottom: 24px; }
+  .q-text  { font-size: .93rem; line-height: 1.6; margin-bottom: 10px; }
+  .q-num   { font-weight: 700; margin-right: 4px; }
+
+  /* ── Forced choice ── */
+  .forced-section { margin-top: 28px; padding-top: 28px; border-top: 2px dashed var(--border); }
+  .forced-label { font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
   .forced-q { font-size: .95rem; line-height: 1.6; color: #333; margin-bottom: 16px; }
   .choice-btns { display: flex; gap: 12px; }
   .choice-btn {
-    flex: 1; padding: 18px; border-radius: 8px;
-    border: 2px solid var(--border); background: #fff;
-    font-family: inherit; font-size: 1rem; font-weight: 700;
-    color: var(--navy); cursor: pointer; text-align: center;
-    transition: all .18s;
+    flex: 1; padding: 18px; border-radius: 8px; border: 2px solid var(--border);
+    background: #fff; font-family: inherit; font-size: 1rem; font-weight: 700;
+    color: var(--navy); cursor: pointer; text-align: center; transition: all .18s;
   }
   .choice-btn:hover { border-color: var(--navy); }
   .choice-btn.picked-a { background: var(--navy);  border-color: var(--navy);  color: #fff; }
   .choice-btn.picked-b { background: var(--green); border-color: var(--green); color: #fff; }
 
-  .scenario-divider {
-    display: flex; align-items: center; gap: 14px; margin: 32px 0;
-  }
+  /* ── Scenario divider ── */
+  .scenario-divider { display: flex; align-items: center; gap: 14px; margin: 32px 0; }
   .scenario-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
-  .scenario-divider span {
-    font-size: .78rem; font-weight: 600; letter-spacing: .08em;
-    text-transform: uppercase; color: var(--muted); white-space: nowrap;
-  }
+  .scenario-divider span { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
 
   /* ── Done screen ── */
   .big-check { font-size: 3rem; margin-bottom: 16px; }
@@ -178,30 +167,19 @@
   .stat-box .lbl { font-size: .78rem; color: var(--muted); margin-top: 2px; }
 
   /* ── Submission status ── */
-  .submit-status {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px; border-radius: 8px; font-size: .9rem;
-    margin-bottom: 16px;
-  }
+  .submit-status { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 8px; font-size: .9rem; margin-bottom: 16px; }
   .submit-status.sending { background: #f0f4ff; border: 1px solid #b0c4f0; color: #2a4a9c; }
   .submit-status.ok      { background: #edfaf2; border: 1px solid #7ed6a2; color: #1a5c35; }
   .submit-status.fail    { background: #fff0f0; border: 1px solid #f0a0a0; color: #8c1c1c; }
-
   @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner {
-    width: 16px; height: 16px; border: 2px solid currentColor;
-    border-top-color: transparent; border-radius: 50%;
-    animation: spin .7s linear infinite; flex-shrink: 0;
-  }
-
-  hr.plain { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  .spinner { width: 16px; height: 16px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 
   .done-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
   @media (max-width: 520px) {
     .card { padding: 28px 18px; }
     .likert { gap: 4px; }
-    .stat-row, .choice-btns { flex-direction: column; }
+    .stat-row, .choice-btns, .done-actions { flex-direction: column; }
   }
 </style>
 </head>
@@ -211,13 +189,12 @@
      ▼▼▼  EXPERIMENT CONFIGURATION — EDIT THIS SECTION  ▼▼▼
 ════════════════════════════════════════════════════════════════
 
-  YOUTUBE VIDEO IDs:
-  From a URL like  https://www.youtube.com/watch?v=dQw4w9WgXcQ
-  the ID is the part after "v=":  dQw4w9WgXcQ
+  HOW TO GET A YOUTUBE VIDEO ID:
+  From https://youtu.be/dQw4w9WgXcQ  →  ID is  dQw4w9WgXcQ
 
   GOOGLE SHEETS URL:
-  Paste the Web App URL from your Apps Script deployment here.
-  Leave it as "" to disable (CSV-only mode).
+  Paste your Apps Script Web App URL here.
+  Leave as "" to use CSV-only mode.
 
 ═══════════════════════════════════════════════════════════════ -->
 <script>
@@ -230,26 +207,27 @@ const CONFIG = {
   title:    "Robot Navigation Study",
   subtitle: "Social Behaviour Perception",
 
-  // ── Google Sheets Web App URL (paste yours here) ──────────
-  // Leave as "" to run in CSV-only mode.
-  googleSheetsUrl: "https://script.google.com/macros/s/AKfycbwsmRhnOYhIuIgimihUNplacqIwniZ0StBPOWRA4IrR7kziztDl1mNWUP98MG5HDJwy/exec",
+  // ── Google Sheets Web App URL ──────────────────────────────
+  googleSheetsUrl: "",
 
   // ── Scenarios ─────────────────────────────────────────────
+  // condition is stored in the CSV so you can track which
+  // video was shown as A and which as B after randomisation.
   scenarios: [
     {
       label:  "Scenario 1",
-      videoA: { id: "VIDEO_ID_1A" },
-      videoB: { id: "VIDEO_ID_1B" },
+      videoA: { id: "3f3GmQ-dZws", condition: "no_risk" },
+      videoB: { id: "RHIGLglBa0M", condition: "risk"    },
     },
     {
       label:  "Scenario 2",
-      videoA: { id: "VIDEO_ID_2A" },
-      videoB: { id: "VIDEO_ID_2B" },
+      videoA: { id: "cgaBNba_pUs", condition: "no_risk" },
+      videoB: { id: "XGuhjzbDdHg", condition: "risk"    },
     },
     {
       label:  "Scenario 3",
-      videoA: { id: "VIDEO_ID_3A" },
-      videoB: { id: "VIDEO_ID_3B" },
+      videoA: { id: "WueK3KClrYE", condition: "no_risk" },
+      videoB: { id: "Zfpp65xWgyY", condition: "risk"    },
     },
   ],
 
@@ -267,7 +245,7 @@ const CONFIG = {
   forcedChoiceText:
     "Which behavior did you find more appropriate for this situation — Video A or Video B?",
 
-  // ── Likert scale labels ────────────────────────────────────
+  // ── Likert labels ──────────────────────────────────────────
   likertLow:  "Strongly Disagree",
   likertHigh: "Strongly Agree",
 };
@@ -289,7 +267,7 @@ const CONFIG = {
   </div>
 </div>
 
-<!-- ══ SCREEN 2: Welcome ════════════════════════════════════ -->
+<!-- ══ SCREEN 2: Welcome & Participant ID ═════════════════ -->
 <div id="screen-intro" class="screen">
   <div class="card">
     <h1>Welcome</h1>
@@ -297,22 +275,64 @@ const CONFIG = {
     <p>After each video please answer 6 questions based on your immediate impression. At the end of each scenario you will be asked one final preference question. There are no right or wrong answers.</p>
     <hr class="plain" />
     <div class="field">
-      <label for="pid-input">Participant ID <small style="color:var(--muted);">(assigned by the researcher)</small></label>
+      <label for="pid-input">Participant ID <small style="color:var(--muted); font-weight:400;">(assigned by the researcher)</small></label>
       <input type="text" id="pid-input" placeholder="e.g. P001" autocomplete="off" />
       <div class="error-msg" id="pid-error">Please enter your participant ID before continuing.</div>
     </div>
-    <button class="btn btn-primary" onclick="startExperiment()">Begin Study →</button>
+    <button class="btn btn-primary" onclick="startExperiment()">Continue →</button>
   </div>
 </div>
 
-<!-- ══ SCREEN 3: Scenario trial ════════════════════════════ -->
+<!-- ══ SCREEN 3: Demographics ══════════════════════════════ -->
+<div id="screen-demographics" class="screen">
+  <div class="card">
+    <h2>About You</h2>
+    <p style="color:var(--muted); margin-bottom:28px;">Before we begin, please answer a few brief questions about yourself.</p>
+
+    <!-- Gender -->
+    <div class="field">
+      <label>Gender</label>
+      <div class="radio-group" id="gender-group">
+        <div class="radio-pill"><input type="radio" name="gender" id="g-male"   value="Male"            /><label for="g-male">Male</label></div>
+        <div class="radio-pill"><input type="radio" name="gender" id="g-female" value="Female"          /><label for="g-female">Female</label></div>
+        <div class="radio-pill"><input type="radio" name="gender" id="g-nb"     value="Non-binary"      /><label for="g-nb">Non-binary</label></div>
+        <div class="radio-pill"><input type="radio" name="gender" id="g-pnts"   value="Prefer not to say"/><label for="g-pnts">Prefer not to say</label></div>
+      </div>
+    </div>
+
+    <!-- Age -->
+    <div class="field">
+      <label for="age-input">Age</label>
+      <input type="number" id="age-input" min="1" max="120" placeholder="e.g. 28" />
+    </div>
+
+    <!-- Robotics familiarity -->
+    <div class="field">
+      <label>How familiar are you with robotics?</label>
+      <div class="likert" id="robotics-likert">
+        <!-- built by JS -->
+      </div>
+      <div class="likert-labels">
+        <span>Not familiar at all</span>
+        <span>Very familiar</span>
+      </div>
+    </div>
+
+    <div class="error-msg" id="demo-error" style="margin-bottom:16px;">
+      Please answer all questions before continuing.
+    </div>
+
+    <button class="btn btn-primary" onclick="submitDemographics()">Begin Study →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4: Scenario Trial ════════════════════════════ -->
 <div id="screen-trial" class="screen">
   <div class="card">
     <div class="progress-wrap">
       <div class="progress-label" id="progress-label"></div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-
     <h2 id="scenario-heading"></h2>
 
     <!-- Video A -->
@@ -327,14 +347,13 @@ const CONFIG = {
       </div>
       <div class="q-block" id="q-block-a">
         <div class="lock-overlay" id="lock-a">
-          <div class="icon">🔒</div>
-          <span>Questions unlock when Video A ends.</span>
+          <div class="icon">🔒</div><span>Questions unlock when Video A ends.</span>
         </div>
         <div id="q-form-a"></div>
       </div>
     </div>
 
-    <!-- Video B (hidden until A questions done) -->
+    <!-- Video B (revealed after A questions done) -->
     <div class="video-section" id="section-b" style="display:none;">
       <div class="scenario-divider"><hr/><span>Now watch Video B</span><hr/></div>
       <div class="video-section-header">
@@ -347,14 +366,13 @@ const CONFIG = {
       </div>
       <div class="q-block" id="q-block-b">
         <div class="lock-overlay" id="lock-b">
-          <div class="icon">🔒</div>
-          <span>Questions unlock when Video B ends.</span>
+          <div class="icon">🔒</div><span>Questions unlock when Video B ends.</span>
         </div>
         <div id="q-form-b"></div>
       </div>
     </div>
 
-    <!-- Forced choice (hidden until B questions done) -->
+    <!-- Forced choice (revealed after B questions done) -->
     <div class="forced-section" id="section-forced" style="display:none;">
       <div class="forced-label">Final Question for This Scenario</div>
       <div class="forced-q" id="forced-q-text"></div>
@@ -372,33 +390,26 @@ const CONFIG = {
   </div>
 </div>
 
-<!-- ══ SCREEN 4: Done ══════════════════════════════════════ -->
+<!-- ══ SCREEN 5: Done ══════════════════════════════════════ -->
 <div id="screen-done" class="screen">
   <div class="card" style="text-align:center;">
     <div class="big-check">✅</div>
     <h1>Study Complete</h1>
     <p>Thank you for your time. Your responses have been recorded.</p>
-
     <div class="stat-row">
       <div class="stat-box"><div class="val" id="stat-scenarios"></div><div class="lbl">Scenarios</div></div>
       <div class="stat-box"><div class="val" id="stat-responses"></div><div class="lbl">Answers recorded</div></div>
       <div class="stat-box"><div class="val" id="stat-pid"></div><div class="lbl">Participant ID</div></div>
     </div>
-
     <hr class="plain" />
-
-    <!-- Submission status (only shown if googleSheetsUrl is set) -->
     <div id="sheets-status-wrap" style="display:none; margin-bottom:20px;">
       <div class="submit-status sending" id="sheets-status">
-        <div class="spinner"></div>
-        <span>Sending responses to researcher…</span>
+        <div class="spinner"></div><span>Sending responses to researcher…</span>
       </div>
     </div>
-
     <p style="font-size:.88rem; color:var(--muted); margin-bottom:20px;">
       Please also download the backup CSV and send it to the researcher.
     </p>
-
     <div class="done-actions">
       <button class="btn btn-accent" onclick="downloadCSV()">⬇ Download Backup CSV</button>
     </div>
@@ -411,10 +422,12 @@ const CONFIG = {
 <script>
 // ── State ────────────────────────────────────────────────────
 let participantId   = "";
+let demographics    = { gender: null, age: null, roboticsFamiliarity: null };
 let scenarioOrder   = [];
 let currentScenario = 0;
 let allResponses    = [];
 
+// Per-scenario state
 let playerA = null, playerB = null;
 let stateAVideoDone = false;
 let stateAQsDone    = false;
@@ -422,10 +435,15 @@ let stateBVideoDone = false;
 let stateBQsDone    = false;
 let forcedChoice    = null;
 
-// ── YouTube API callback ─────────────────────────────────────
+// Tracks which video was actually shown as A and B this session
+let videoShownAsA = null;
+let videoShownAsB = null;
+let abSwapped     = false;
+
+// ── YouTube API callback ──────────────────────────────────────
 function onYouTubeIframeAPIReady() { /* players created dynamically */ }
 
-// ── Boot ─────────────────────────────────────────────────────
+// ── Boot ──────────────────────────────────────────────────────
 window.onload = () => {
   document.getElementById("pw-title").textContent    = CONFIG.title;
   document.getElementById("pw-subtitle").textContent = CONFIG.subtitle;
@@ -433,7 +451,21 @@ window.onload = () => {
     .addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
   document.getElementById("pid-input")
     .addEventListener("keydown", e => { if (e.key === "Enter") startExperiment(); });
+  buildRoboticsLikert();
 };
+
+// ── Build the robotics familiarity Likert scale ───────────────
+function buildRoboticsLikert() {
+  const container = document.getElementById("robotics-likert");
+  for (let v = 1; v <= 5; v++) {
+    const opt = document.createElement("div");
+    opt.className = "likert-option";
+    opt.innerHTML = `
+      <input type="radio" name="robotics" id="rob_${v}" value="${v}" />
+      <label for="rob_${v}"><span class="val">${v}</span></label>`;
+    container.appendChild(opt);
+  }
+}
 
 // ── Password ──────────────────────────────────────────────────
 function checkPassword() {
@@ -444,13 +476,32 @@ function checkPassword() {
   }
 }
 
-// ── Start experiment ──────────────────────────────────────────
+// ── Participant ID → go to demographics ───────────────────────
 function startExperiment() {
   const pid = document.getElementById("pid-input").value.trim();
   if (!pid) { document.getElementById("pid-error").style.display = "block"; return; }
   participantId = pid;
+  showScreen("screen-demographics");
+}
 
-  // Fisher-Yates shuffle
+// ── Demographics submission ───────────────────────────────────
+function submitDemographics() {
+  const gender   = document.querySelector('input[name="gender"]:checked');
+  const age      = document.getElementById("age-input").value.trim();
+  const robotics = document.querySelector('input[name="robotics"]:checked');
+
+  if (!gender || !age || !robotics) {
+    document.getElementById("demo-error").style.display = "block";
+    return;
+  }
+
+  demographics = {
+    gender:              gender.value,
+    age:                 parseInt(age),
+    roboticsFamiliarity: parseInt(robotics.value),
+  };
+
+  // Shuffle scenario order (Fisher-Yates)
   scenarioOrder = CONFIG.scenarios.map((_, i) => i);
   for (let i = scenarioOrder.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -474,6 +525,12 @@ function loadScenario() {
   const scenario = CONFIG.scenarios[scenIdx];
   const total    = CONFIG.scenarios.length;
 
+  // ── Randomly swap A/B for this scenario ──────────────────
+  abSwapped    = Math.random() < 0.5;
+  videoShownAsA = abSwapped ? scenario.videoB : scenario.videoA;
+  videoShownAsB = abSwapped ? scenario.videoA : scenario.videoB;
+
+  // Progress
   document.getElementById("progress-label").textContent =
     `Scenario ${currentScenario + 1} of ${total}`;
   document.getElementById("progress-fill").style.width =
@@ -483,26 +540,28 @@ function loadScenario() {
     currentScenario === total - 1 ? "Complete Study ✓" : "Next Scenario →";
   document.getElementById("btn-next").disabled = true;
 
+  // Reset UI
   setNotice("notice-a", false);
   setNotice("notice-b", false);
-  document.getElementById("lock-a").style.display = "flex";
-  document.getElementById("lock-b").style.display = "flex";
-  document.getElementById("section-b").style.display      = "none";
+  document.getElementById("lock-a").style.display      = "flex";
+  document.getElementById("lock-b").style.display      = "flex";
+  document.getElementById("section-b").style.display   = "none";
   document.getElementById("section-forced").style.display = "none";
-  document.getElementById("choice-a").className = "choice-btn";
-  document.getElementById("choice-b").className = "choice-btn";
+  document.getElementById("choice-a").className        = "choice-btn";
+  document.getElementById("choice-b").className        = "choice-btn";
   document.getElementById("forced-q-text").textContent = CONFIG.forcedChoiceText;
 
-  // Restore player divs (YT API replaces them with iframes)
+  // Restore player divs (YT replaces them with iframes)
   document.getElementById("wrapper-a").innerHTML = '<div id="yt-player-a"></div>';
   document.getElementById("wrapper-b").innerHTML = '<div id="yt-player-b"></div>';
 
   buildQuestions("q-form-a", "qa");
   buildQuestions("q-form-b", "qb");
 
+  // Create Player A
   setTimeout(() => {
     playerA = new YT.Player("yt-player-a", {
-      videoId: scenario.videoA.id,
+      videoId: videoShownAsA.id,
       playerVars: { rel: 0, modestbranding: 1 },
       events: { onStateChange: e => { if (e.data === YT.PlayerState.ENDED) onVideoAEnd(); } }
     });
@@ -518,29 +577,23 @@ function onVideoAEnd() {
   document.getElementById("lock-a").style.display = "none";
 }
 
-// ── Check A questions ─────────────────────────────────────────
 function checkAQuestions() {
   if (!stateAVideoDone) return;
   const done = CONFIG.questions.every(q =>
     document.querySelector(`input[name="qa_${q.num}"]:checked`)
   );
-  if (done && !stateAQsDone) {
-    stateAQsDone = true;
-    revealVideoB();
-  }
+  if (done && !stateAQsDone) { stateAQsDone = true; revealVideoB(); }
 }
 
 // ── Reveal Video B ────────────────────────────────────────────
 function revealVideoB() {
-  const scenIdx  = scenarioOrder[currentScenario];
-  const scenario = CONFIG.scenarios[scenIdx];
   const sec = document.getElementById("section-b");
   sec.style.display = "block";
   sec.classList.add("reveal");
   setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
   setTimeout(() => {
     playerB = new YT.Player("yt-player-b", {
-      videoId: scenario.videoB.id,
+      videoId: videoShownAsB.id,
       playerVars: { rel: 0, modestbranding: 1 },
       events: { onStateChange: e => { if (e.data === YT.PlayerState.ENDED) onVideoBEnd(); } }
     });
@@ -554,16 +607,12 @@ function onVideoBEnd() {
   document.getElementById("lock-b").style.display = "none";
 }
 
-// ── Check B questions ─────────────────────────────────────────
 function checkBQuestions() {
   if (!stateBVideoDone) return;
   const done = CONFIG.questions.every(q =>
     document.querySelector(`input[name="qb_${q.num}"]:checked`)
   );
-  if (done && !stateBQsDone) {
-    stateBQsDone = true;
-    revealForcedChoice();
-  }
+  if (done && !stateBQsDone) { stateBQsDone = true; revealForcedChoice(); }
 }
 
 // ── Reveal forced choice ──────────────────────────────────────
@@ -574,7 +623,7 @@ function revealForcedChoice() {
   setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
 }
 
-// ── Forced choice selection ───────────────────────────────────
+// ── Forced choice ─────────────────────────────────────────────
 function selectChoice(pick) {
   forcedChoice = pick;
   document.getElementById("choice-a").className = "choice-btn" + (pick === "A" ? " picked-a" : "");
@@ -582,7 +631,7 @@ function selectChoice(pick) {
   document.getElementById("btn-next").disabled = false;
 }
 
-// ── Next scenario / finish ────────────────────────────────────
+// ── Submit scenario ───────────────────────────────────────────
 function nextScenario() {
   const scenIdx  = scenarioOrder[currentScenario];
   const scenario = CONFIG.scenarios[scenIdx];
@@ -597,20 +646,28 @@ function nextScenario() {
   }));
 
   const record = {
+    // Participant
     participantId,
+    gender:              demographics.gender,
+    age:                 demographics.age,
+    roboticsFamiliarity: demographics.roboticsFamiliarity,
+    // Scenario
     scenarioLabel:         scenario.label,
     scenarioOriginalIndex: scenIdx + 1,
     presentationOrder:     currentScenario + 1,
-    videoAId:              scenario.videoA.id,
-    videoBId:              scenario.videoB.id,
+    // Video assignment (post-randomisation)
+    videoA_id:        videoShownAsA.id,
+    videoA_condition: videoShownAsA.condition,
+    videoB_id:        videoShownAsB.id,
+    videoB_condition: videoShownAsB.condition,
+    abSwapped,
+    // Responses
     answersA,
     answersB,
     forcedChoice,
   };
 
   allResponses.push(record);
-
-  // ── Send this scenario's row to Google Sheets immediately ──
   submitToSheets(record);
 
   currentScenario++;
@@ -621,12 +678,12 @@ function nextScenario() {
   }
 }
 
-// ── Send one scenario row to Google Sheets ────────────────────
+// ── Send to Google Sheets ─────────────────────────────────────
 function submitToSheets(record) {
   if (!CONFIG.googleSheetsUrl) return;
   fetch(CONFIG.googleSheetsUrl, {
     method:  "POST",
-    mode:    "no-cors",          // avoids CORS preflight; response will be opaque
+    mode:    "no-cors",
     headers: { "Content-Type": "text/plain" },
     body:    JSON.stringify(record),
   }).catch(err => console.warn("Sheets submit failed:", err));
@@ -635,19 +692,15 @@ function submitToSheets(record) {
 // ── Done screen ───────────────────────────────────────────────
 function showDone() {
   showScreen("screen-done");
-
   document.getElementById("stat-scenarios").textContent = CONFIG.scenarios.length;
   document.getElementById("stat-responses").textContent =
     CONFIG.questions.length * 2 * CONFIG.scenarios.length;
   document.getElementById("stat-pid").textContent = participantId;
 
-  // Show submission status if Sheets is configured
   if (CONFIG.googleSheetsUrl) {
     const wrap   = document.getElementById("sheets-status-wrap");
     const status = document.getElementById("sheets-status");
     wrap.style.display = "block";
-
-    // Data was already sent per scenario; just show confirmation after a moment
     setTimeout(() => {
       status.className = "submit-status ok";
       status.innerHTML = "✅ &nbsp;Responses sent to researcher successfully.";
@@ -655,13 +708,17 @@ function showDone() {
   }
 }
 
-// ── CSV download (backup) ─────────────────────────────────────
+// ── CSV download ──────────────────────────────────────────────
 function downloadCSV() {
   const qHeaders = CONFIG.questions.flatMap(q => [`Q${q.num}_VideoA`, `Q${q.num}_VideoB`]);
   const header   = [
-    "ParticipantID", "ScenarioLabel", "ScenarioOriginalIndex",
-    "PresentationOrder", "VideoA_ID", "VideoB_ID",
-    ...qHeaders, "ForcedChoice"
+    "ParticipantID", "Gender", "Age", "RoboticsFamiliarity",
+    "ScenarioLabel", "ScenarioOriginalIndex", "PresentationOrder",
+    "VideoA_ID", "VideoA_Condition",
+    "VideoB_ID", "VideoB_Condition",
+    "AB_Swapped",
+    ...qHeaders,
+    "ForcedChoice",
   ];
 
   const rows = allResponses.map(r => {
@@ -671,9 +728,13 @@ function downloadCSV() {
       return [a, b];
     });
     return [
-      r.participantId, r.scenarioLabel, r.scenarioOriginalIndex,
-      r.presentationOrder, r.videoAId, r.videoBId,
-      ...qCols, r.forcedChoice
+      r.participantId, r.gender, r.age, r.roboticsFamiliarity,
+      r.scenarioLabel, r.scenarioOriginalIndex, r.presentationOrder,
+      r.videoA_id, r.videoA_condition,
+      r.videoB_id, r.videoB_condition,
+      r.abSwapped,
+      ...qCols,
+      r.forcedChoice,
     ];
   });
 
@@ -696,7 +757,6 @@ function buildQuestions(containerId, prefix) {
   CONFIG.questions.forEach(q => {
     const qDiv = document.createElement("div");
     qDiv.className = "q-item";
-
     const qText = document.createElement("div");
     qText.className = "q-text";
     qText.innerHTML = `<span class="q-num">${q.num}.</span> ${q.text}`;
@@ -738,8 +798,8 @@ function setNotice(id, done) {
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
-
 </body>
 </html>
