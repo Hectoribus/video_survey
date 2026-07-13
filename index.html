@@ -210,16 +210,19 @@ const CONFIG = {
   scenarios: [
     {
       label:  "Scenario 1",
+      description: "The robot encounters two walking people in a frontal approach. The first person is idly walking, while the second person is walking while using a laptop.",
       videoA: { id: "3f3GmQ-dZws", condition: "no_risk" },
       videoB: { id: "RHIGLglBa0M", condition: "risk"    },
     },
     {
       label:  "Scenario 2",
+      description: "The robot encounters a moving person emerging from a blind corner. The person is using crutches.",
       videoA: { id: "cgaBNba_pUs", condition: "no_risk" },
       videoB: { id: "XGuhjzbDdHg", condition: "risk"    },
     },
     {
       label:  "Scenario 3",
+      description: "The robot encounters two people in a frontal approach. The first person is initially standing still before taking out their phone. The second person is initially standing still before crouching to load boxes onto a trolley.",
       videoA: { id: "WueK3KClrYE", condition: "no_risk" },
       videoB: { id: "Zfpp65xWgyY", condition: "risk"    },
     },
@@ -321,6 +324,7 @@ const CONFIG = {
     </div>
 
     <h2 id="scenario-heading"></h2>
+<div class="rewatch-note"><span class="note-icon">📋</span><span id="scenario-description-text"></span></div>
 
     <!-- Rewatch note -->
     <div class="rewatch-note">
@@ -401,6 +405,7 @@ const CONFIG = {
       </div>
     </div>
   </div>
+<div style="margin-top:24px;text-align:center;"><button class="btn btn-accent" onclick="downloadCSV()">Download Responses (.csv)</button></div>
 </div>
 
 
@@ -516,6 +521,7 @@ function loadScenario() {
   document.getElementById("progress-fill").style.width =
     `${(currentScenario / total) * 100}%`;
   document.getElementById("scenario-heading").textContent = scenario.label;
+  document.getElementById("scenario-description-text").textContent = scenario.description;
   document.getElementById("btn-next").textContent =
     currentScenario === total - 1 ? "Complete Study ✓" : "Next Scenario →";
   document.getElementById("btn-next").disabled = true;
@@ -734,6 +740,19 @@ function buildQuestions(containerId, prefix) {
     qDiv.appendChild(labels);
     form.appendChild(qDiv);
   });
+}
+
+
+function downloadCSV() {
+ const flat=buildFlatRecord();
+ const headers=Object.keys(flat);
+ const values=headers.map(h=>`"${String(flat[h]??"").replace(/"/g,'""')}"`);
+ const csv=headers.join(",")+"\n"+values.join(",");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download=`${participantId}_responses.csv`;
+ a.click();
 }
 
 // ── Utilities ─────────────────────────────────────────────────
