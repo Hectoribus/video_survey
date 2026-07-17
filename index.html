@@ -183,6 +183,30 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner { width: 16px; height: 16px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 
+  
+  textarea {
+    width:100%;
+    min-height:180px;
+    padding:16px 18px;
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    background:#fafafa;
+    font-family:inherit;
+    font-size:1rem;
+    line-height:1.7;
+    color:var(--navy);
+    resize:vertical;
+    transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  textarea:focus{
+    outline:none;
+    border-color:var(--accent);
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(46,111,172,.12);
+  }
+  textarea::placeholder{color:var(--muted);}
+
+
   @media (max-width: 520px) {
     .card { padding: 28px 18px; }
     .likert { gap: 4px; }
@@ -392,7 +416,7 @@ const CONFIG = {
 <div id="screen-comments" class="screen">
 <div class="card">
 <h2>Additional Comments</h2>
-<p>This final question is optional. We'd love to hear any thoughts you have about the robot's behaviour, how a social robot should behave around people, or any suggestions or observations from the videos.</p>
+<p>This final question is optional. However, we'd love to hear your thoughts about the robot's behaviour! You're welcome to share any suggestions or observations from the videos. We'd also love to know how you think an ideal social robot should behave around people.</p>
 <div class="field"><label for="comments-input">Your comments</label><textarea id="comments-input" placeholder="Write any comments here..."></textarea></div>
 <button class="btn btn-primary" onclick="finishStudy()">Submit Responses →</button></div></div>
 
