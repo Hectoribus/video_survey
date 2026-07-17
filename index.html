@@ -388,6 +388,15 @@ const CONFIG = {
   </div>
 </div>
 
+
+<div id="screen-comments" class="screen">
+<div class="card">
+<h2>Additional Comments</h2>
+<p>This final question is optional. We'd love to hear any thoughts you have about the robot's behaviour, how a social robot should behave around people, or any suggestions or observations from the videos.</p>
+<div class="field"><label for="comments-input">Your comments</label><textarea id="comments-input" placeholder="Write any comments here..."></textarea></div>
+<button class="btn btn-primary" onclick="finishStudy()">Submit Responses →</button></div></div>
+
+
 <!-- ══ SCREEN 5: Done ══════════════════════════════════════ -->
 <div id="screen-done" class="screen">
   <div class="card" style="text-align:center;">
@@ -419,6 +428,7 @@ let demographics    = { gender: null, age: null, roboticsFamiliarity: null };
 let scenarioOrder   = [];
 let currentScenario = 0;
 let allResponses    = [];
+let additionalComments="";
 
 let playerA = null, playerB = null;
 let stateAVideoDone = false;
@@ -647,11 +657,13 @@ function nextScenario() {
   if (currentScenario < CONFIG.scenarios.length) {
     loadScenario();
   } else {
-    showDone();
+    showScreen("screen-comments");
   }
 }
 
 // ── Done — send everything in one shot ───────────────────────
+function finishStudy(){additionalComments=document.getElementById("comments-input").value.trim();showDone();}
+
 function showDone() {
   showScreen("screen-done");
   document.getElementById("stat-scenarios").textContent = CONFIG.scenarios.length;
@@ -690,6 +702,7 @@ function buildFlatRecord() {
     gender:              demographics.gender,
     age:                 demographics.age,
     roboticsFamiliarity: demographics.roboticsFamiliarity,
+    additionalComments,
   };
 
   // Keyed by original scenario index (1, 2, 3) — consistent regardless of presentation order
